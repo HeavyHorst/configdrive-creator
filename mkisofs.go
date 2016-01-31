@@ -1,13 +1,13 @@
 package main
 
 import (
-	"net/http"
+	"io"
 	"os/exec"
 )
 
 type request struct {
 	path    string
-	w       http.ResponseWriter
+	w       io.Writer
 	errChan chan error
 }
 
@@ -43,7 +43,7 @@ func initMkisofs() *mkisofs {
 	return mkiso
 }
 
-func (m *mkisofs) create(path string, w http.ResponseWriter) error {
+func (m *mkisofs) create(path string, w io.Writer) error {
 	err := make(chan error)
 	req := request{
 		path,
