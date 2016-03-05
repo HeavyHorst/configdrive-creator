@@ -32,6 +32,7 @@ func init() {
 func main() {
 	router := xmux.New()
 
+	router.GET("/", xhandler.HandlerFuncC(indexHandler))
 	router.POST("/configdrive", xhandler.HandlerFuncC(configdriveHandler))
 	log.Fatal(http.ListenAndServe(":3000", mw.Handler(router)))
 }

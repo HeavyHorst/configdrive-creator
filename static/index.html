@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Config Drive Creator</title>
+    <style type="text/css" media="screen">
+        body {
+            background-color: #1a1a1a;
+            color: white;
+        }
+        .row {
+            height: 90vh;
+        }
+        #editor {
+            width: 100%;
+            height: 100%;
+        }
+        .btnList {
+            background: #696569;
+        }
+        .btn {
+            color: #ffffff;
+            font-size: 20px;
+            display:inline-block;
+            padding: 10px 20px 10px 20px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: #1a1a1a;
+            text-decoration: none;
+        }
+    </style>
+</head>
+
+<body>
+    <form id="validate" style="margin: 0 auto; width: 70%; height: 100%;">
+        <div class="row">
+            <h4>Enter Cloud-Config:</h4>
+            <div class="btnList">
+                 <a class="btn" onclick="submitYaml()">Submit</a>
+            </div>
+            <div id="editor"></div>
+        </div>
+    </form>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.3/ace.js"></script>
+    <script>
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/tomorrow_night");
+        editor.getSession().setMode("ace/mode/yaml");
+
+        var XHR = new XMLHttpRequest();
+        XHR.onload = function(event) {
+            var blob = new Blob([XHR.response], {
+                type: "application/octet-stream"
+            });
+            var a = document.createElement("a");
+            var url = window.URL.createObjectURL(blob);
+            a.href = url;
+            a.download = "configdrive.iso";
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function submitYaml() {
+            var code = new Blob([editor.getValue()], {
+                type: "text/x-yaml"
+            });
+            var FD = new FormData();
+            FD.append("file", code);
+            XHR.open('POST', '/configdrive');
+            XHR.responseType = "arraybuffer";
+            XHR.send(FD);
+        }
+    </script>
+</body>
+
+</html>

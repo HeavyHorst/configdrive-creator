@@ -12,6 +12,11 @@ import (
 	"golang.org/x/net/context"
 )
 
+func indexHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
+	body, _ := ioutil.ReadFile("./static/index.html")
+	w.Write(body)
+}
+
 func configdriveHandler(ctx context.Context, w http.ResponseWriter, r *http.Request) {
 	l := xlog.FromContext(ctx)
 

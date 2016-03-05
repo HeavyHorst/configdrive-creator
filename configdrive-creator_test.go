@@ -62,12 +62,12 @@ func TestApi(t *testing.T) {
 		t.Error(err)
 	}
 	defer resp.Body.Close()
-	resp_body, err := ioutil.ReadAll(resp.Body)
+	respBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		t.Error(err)
 	}
 
-	if len(resp_body) != len(data1) {
+	if len(respBody) != len(data1) {
 		t.Error("iso file has the wrong size")
 	}
 
