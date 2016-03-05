@@ -8,14 +8,15 @@ ENV GO15VENDOREXPERIMENT 1
 
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
 ADD . /go/src/github.com/HeavyHorst/configdrive-creator
+WORKDIR /go/src/github.com/HeavyHorst/configdrive-creator
 
 RUN set -ex && \
     apk --update add --no-cache cdrkit && \
 	apk --update add --virtual build-deps go && \
-	go install github.com/HeavyHorst/configdrive-creator && \
+	go build && \
     apk del build-deps
 
 EXPOSE 3000
 
 # Startup
-ENTRYPOINT /go/bin/configdrive-creator
+ENTRYPOINT ./configdrive-creator
